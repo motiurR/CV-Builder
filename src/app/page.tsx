@@ -140,6 +140,22 @@ export default function Home() {
 
         </div>
       </main>
+
+      {/* Footer - Not printed */}
+      <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-6 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            © {new Date().getFullYear()} Optima CV Builder. All rights reserved.
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
+            <span>Built by Motiur Rahman</span>
+            <span className="hidden sm:inline">•</span>
+            <a href="mailto:motiurrahman.cse@gmail.com" className="text-blue-600 hover:text-blue-500 transition-colors flex items-center gap-1">
+              ✉ motiurrahman.cse@gmail.com
+            </a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
