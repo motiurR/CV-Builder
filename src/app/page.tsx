@@ -29,7 +29,7 @@ export default function Home() {
   const handleDownloadPDF = async () => {
     const element = document.getElementById('cv-print-area');
     if (!element) return;
-    
+
     setIsGeneratingPdf(true);
     try {
       const dataUrl = await toJpeg(element, {
@@ -37,18 +37,18 @@ export default function Home() {
         backgroundColor: '#ffffff',
         pixelRatio: 2,
       });
-      
+
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'px',
         format: 'a4',
       });
-      
+
       const pdfWidth = pdf.internal.pageSize.getWidth();
       // Since pixelRatio is 2, the image dimensions are 2x the CSS dimensions. 
       // We calculate the scaled height proportionally.
       const pdfHeight = (element.offsetHeight * pdfWidth) / element.offsetWidth;
-      
+
       pdf.addImage(dataUrl, 'JPEG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`${cvData.name ? cvData.name.replace(/\s+/g, '_') : 'My'}_CV.pdf`);
     } catch (error) {
@@ -65,7 +65,7 @@ export default function Home() {
       <div className="bg-emerald-50 dark:bg-emerald-900/30 border-b border-emerald-200 dark:border-emerald-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-center text-sm">
           <span className="text-emerald-800 dark:text-emerald-200 text-center font-medium flex items-center gap-2">
-            <span>☕ সার্ভার চালু রাখতে সাহায্য করুন — বিকাশে ২০ টাকা ডোনেট করুন: <strong>01XXXXXXXXX (Personal)</strong></span>
+            <span>☕ এই ফ্রি টুলটি আপনার উপকারে আসলে, ডেভেলপারকে এক কাপ কফি খাওয়াতে পারেন! বিকাশে সাপোর্ট করুন: <strong>01756713164 (Personal)</strong> ❤️</span>
           </span>
         </div>
       </div>
@@ -85,9 +85,8 @@ export default function Home() {
           <button
             onClick={handleDownloadPDF}
             disabled={isGeneratingPdf}
-            className={`font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-sm ${
-              isGeneratingPdf ? 'bg-gray-400 cursor-not-allowed text-gray-800' : 'bg-blue-600 hover:bg-blue-700 text-white'
-            }`}
+            className={`font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-sm ${isGeneratingPdf ? 'bg-gray-400 cursor-not-allowed text-gray-800' : 'bg-blue-600 hover:bg-blue-700 text-white'
+              }`}
           >
             {isGeneratingPdf ? (
               <>
@@ -112,7 +111,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* Left Column: Form & Uploaders */}
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
