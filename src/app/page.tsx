@@ -61,6 +61,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 font-sans">
+      {/* Monetization Banner - Not printed */}
+      <div className="bg-emerald-50 dark:bg-emerald-900/30 border-b border-emerald-200 dark:border-emerald-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-center text-sm">
+          <span className="text-emerald-800 dark:text-emerald-200 text-center font-medium flex items-center gap-2">
+            <span>☕ সার্ভার চালু রাখতে সাহায্য করুন — বিকাশে ২০ টাকা ডোনেট করুন: <strong>01XXXXXXXXX (Personal)</strong></span>
+          </span>
+        </div>
+      </div>
+
       {/* Header - Not printed */}
       <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
