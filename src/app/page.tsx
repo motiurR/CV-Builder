@@ -1,63 +1,143 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState } from 'react';
+import ImageUploader from '@/components/ImageUploader';
+import CVForm, { CVData } from '@/components/CVForm';
+import CVPreview from '@/components/CVPreview';
+import { toJpeg } from 'html-to-image';
+import { jsPDF } from 'jspdf';
 
 export default function Home() {
+  const [cvData, setCvData] = useState<CVData>({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    github: '',
+    website: '',
+    summary: '',
+    skills: '',
+    experience: '',
+    education: '',
+    references: '',
+  });
+
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('cv-print-area');
+    if (!element) return;
+    
+    setIsGeneratingPdf(true);
+    try {
+      const dataUrl = await toJpeg(element, {
+        quality: 0.95,
+        backgroundColor: '#ffffff',
+        pixelRatio: 2,
+      });
+      
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: 'a4',
+      });
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      // Since pixelRatio is 2, the image dimensions are 2x the CSS dimensions. 
+      // We calculate the scaled height proportionally.
+      const pdfHeight = (element.offsetHeight * pdfWidth) / element.offsetWidth;
+      
+      pdf.addImage(dataUrl, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${cvData.name ? cvData.name.replace(/\s+/g, '_') : 'My'}_CV.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 font-sans">
+      {/* Header - Not printed */}
+      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-xl flex items-center justify-center font-bold text-2xl shadow-md border border-white dark:border-gray-800">
+              O
+            </div>
+            <div className="hidden sm:flex flex-col">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">Optima CV Builder</h1>
+              <span className="text-xs text-gray-500 font-medium">Professional Resumes</span>
+            </div>
+          </div>
+          <button
+            onClick={handleDownloadPDF}
+            disabled={isGeneratingPdf}
+            className={`font-medium py-2 px-6 rounded-lg transition-colors flex items-center gap-2 shadow-sm ${
+              isGeneratingPdf ? 'bg-gray-400 cursor-not-allowed text-gray-800' : 'bg-blue-600 hover:bg-blue-700 text-white'
+            }`}
+          >
+            {isGeneratingPdf ? (
+              <>
+                <svg className="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Generating...
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                Download PDF CV
+              </>
+            )}
+          </button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Left Column: Form & Uploaders */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 border-b pb-2 mb-4">BD Circular Requirements</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <ImageUploader
+                  label="Profile Photo"
+                  type="photo"
+                  onImageProcessed={setPhotoUrl}
+                />
+                <ImageUploader
+                  label="Signature"
+                  type="signature"
+                  onImageProcessed={setSignatureUrl}
+                />
+              </div>
+            </div>
+
+            <CVForm data={cvData} onChange={setCvData} />
+          </div>
+
+          {/* Right Column: Live Preview */}
+          <div className="lg:col-span-7">
+            <div className="sticky top-24">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">Live Preview</h2>
+                <span className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded-full font-medium">A4 Size Ready</span>
+              </div>
+              <div className="bg-gray-200 dark:bg-gray-800 p-4 sm:p-8 rounded-xl overflow-x-auto shadow-inner border border-gray-300 dark:border-gray-700 flex justify-center">
+                <CVPreview data={cvData} photoUrl={photoUrl} signatureUrl={signatureUrl} />
+              </div>
+            </div>
+          </div>
+
         </div>
       </main>
     </div>
