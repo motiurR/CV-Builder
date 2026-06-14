@@ -65,7 +65,10 @@ export default function Home() {
       <div className="bg-emerald-50 dark:bg-emerald-900/30 border-b border-emerald-200 dark:border-emerald-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-center text-sm">
           <span className="text-emerald-800 dark:text-emerald-200 text-center font-medium flex items-center gap-2">
-            <span>☕ এই ফ্রি টুলটি আপনার উপকারে আসলে, ডেভেলপারকে এক কাপ কফি খাওয়াতে পারেন! বিকাশে সাপোর্ট করুন: <strong>01756713164 (Personal)</strong> ❤️</span>
+            <span>
+              ☕ If this free tool has been helpful to you, consider buying the developer a cup of coffee! 
+              Support via bKash: <strong>01756713164 (Personal)</strong> ❤️
+            </span>
           </span>
         </div>
       </div>
