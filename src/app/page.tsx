@@ -118,7 +118,7 @@ export default function Home() {
           {/* Left Column: Form & Uploaders */}
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 p-6">
-              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 border-b pb-2 mb-4">BD Circular Requirements</h2>
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 border-b pb-2 mb-4">File Section</h2>
               <div className="grid grid-cols-2 gap-4">
                 <ImageUploader
                   label="Profile Photo"
